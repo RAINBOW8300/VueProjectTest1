@@ -18,6 +18,8 @@ import share from '../components/Home/Share/share.vue'
 import video from '../components/Home/Video/video.vue'
 //新闻详情页面的路由
 import newsDetail from '../components/Home/News/detail.vue'
+//图片详细页面
+import imageDetail from '../components/Home/Share/detail.vue'
 // import default from 'vue';
 //设置路由
 let router = new VueRouter({
@@ -33,12 +35,8 @@ let router = new VueRouter({
         { path: '/feedback', component: feedback },
         { path: '/share', component: share },
         { path: '/video', component: video },
-        {
-            name: 'newsDetail',
-            path: '/detail/:id',
-            component: newsDetail,
-            props: true
-        }
+        { name: 'newsDetail', path: '/detail/:id', component: newsDetail, props: true },
+        { name: 'imageDetail', path: '/getimageInfo/:id', component: imageDetail, props: true }
     ],
     linkActiveClass: 'mui-active'
 })

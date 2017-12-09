@@ -39,12 +39,11 @@ export default {
    },
    methods: {
         getcomment(){
+            console.log(this.id)
           this.$http.get('getcomments/'+this.id+'?pageindex='+this.pageIndex)
             .then((res)=>{
                 if(res.status==200&&res.data.status==0){
-                    if(res.data.message.length>0){
-                        this.comments=this.comments.concat(res.data.message) 
-                    }
+                    this.comments=this.comments.concat(res.data.message)
                 }else{
                     console.log("服务器出错了")
                 }
@@ -59,7 +58,7 @@ export default {
                 this.$toast("请输入评论内容")
                 return
             }
-            this.$http.post('postcomment/'+this.id,"content="+this.content)
+            this.$http.post('postcomment/'+this.id,'content='+this.content)
                 .then((res)=>{
                     if(res.status===200&&res.data.status===0){
                         //评论成功
