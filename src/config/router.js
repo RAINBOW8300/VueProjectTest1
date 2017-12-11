@@ -25,18 +25,18 @@ import imageDetail from '../components/Home/Share/detail.vue'
 let router = new VueRouter({
     routes: [
         { path: '/', redirect: '/home' },
-        { path: '/home', component: home },
-        { path: '/member', component: member },
-        { path: '/shopcar', component: shopcar },
-        { path: '/search', component: search },
-        { path: '/news', component: news },
-        { path: '/buy', component: buy },
-        { path: '/content', component: content },
-        { path: '/feedback', component: feedback },
-        { path: '/share', component: share },
-        { path: '/video', component: video },
-        { name: 'newsDetail', path: '/detail/:id', component: newsDetail, props: true },
-        { name: 'imageDetail', path: '/getimageInfo/:id', component: imageDetail, props: true }
+        { path: '/home', meta: { title: '首页' }, component: home },
+        { path: '/member', meta: { title: '个人中心' }, component: member },
+        { path: '/shopcar', meta: { title: '购物车' }, component: shopcar },
+        { path: '/search', meta: { title: '搜索页面' }, component: search },
+        { path: '/news', meta: { title: '新闻列表' }, component: news },
+        { path: '/buy', meta: { title: '商品列表' }, component: buy },
+        { path: '/content', meta: { title: '联系我们' }, component: content },
+        { path: '/feedback', meta: { title: '留言反馈' }, component: feedback },
+        { path: '/share', meta: { title: '图片分享' }, component: share },
+        { path: '/video', meta: { title: '视频专区' }, component: video },
+        { name: 'newsDetail', meta: { title: '新闻详情' }, path: '/detail/:id', component: newsDetail, props: true },
+        { name: 'imageDetail', meta: { title: '图片详情' }, path: '/getimageInfo/:id', component: imageDetail, props: true }
     ],
     linkActiveClass: 'mui-active'
 })

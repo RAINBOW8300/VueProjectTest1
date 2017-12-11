@@ -1,7 +1,7 @@
 <template>
 <div class="container">
    <header class="mui-bar mui-bar-nav">
-        <a v-if="isShow" @click="goback" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <a v-if="isShow" @click="goback()" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         <h1 class="mui-title">底部选项卡-div模式</h1>
     </header>
     <nav class="mui-bar mui-bar-tab">
@@ -27,19 +27,22 @@
 </template>
 
 <script>
+
     export default{
         data() {
             return {
                 isShow:false,
-                routeArr:['/search','/home','/share','/member']
+                routeArr:['/search','/home','/shopcar','/member']
             }
         },
         created () {
-            this.checkeds()
+            this.checkeds(),
+            this.changeTitle()
         },
         watch: {
             '$route':function(newvalue){
-                this.checkeds()
+                this.checkeds(),
+                this.changeTitle()
             }
         },
         methods: {
@@ -52,6 +55,15 @@
                 }else{
                     this.isShow=false
                 }
+            },
+            changeTitle(){
+                if(this.$route.meta.title){
+                    document.title=this.$route.meta.title
+                }else{
+                    document.title='默认标题'
+                }
+                
+
             }
         }
     }
