@@ -1,7 +1,7 @@
 <template>
 <div class="container">
    <header class="mui-bar mui-bar-nav">
-        <a @click="goback" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <a v-if="isShow" @click="goback" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         <h1 class="mui-title">底部选项卡-div模式</h1>
     </header>
     <nav class="mui-bar mui-bar-tab">
@@ -30,20 +30,28 @@
     export default{
         data() {
             return {
-                isShow:false
+                isShow:false,
+                routeArr:['/search','/home','/share','/member']
             }
         },
         created () {
-            
+            this.checkeds()
         },
         watch: {
             '$route':function(newvalue){
-                
+                this.checkeds()
             }
         },
         methods: {
             goback(){
                 this.$router.back()
+            },
+            checkeds(){
+                if(this.routeArr.indexOf(this.$route.path)==-1){
+                    this.isShow=true
+                }else{
+                    this.isShow=false
+                }
             }
         }
     }

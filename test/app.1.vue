@@ -2,7 +2,7 @@
   <!-- 此处有且只能有一个根节点 -->
   <div class="container">
     <header class="mui-bar mui-bar-nav">
-			<a v-if="isShow" @click="goback" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a @click="goback" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">VueCMS</h1>
 		</header>
 		<nav class="mui-bar mui-bar-tab">

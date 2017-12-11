@@ -14,24 +14,6 @@
                 </div>
             </router-link>
         </li>
-        <!-- <li class="mui-table-view-cell mui-media">
-            <a href="javascript:;">
-                <img class="mui-media-object mui-pull-left" src="../../../../statics/images/menu1.png">
-                <div class="mui-media-body">
-                    幸福
-                    <div class="blue"><a href="#" class="l">发表时间:2017/12/7</a><a href="#" class="f">点击人数:111</a></div>
-                </div>
-            </a>
-        </li>
-        <li class="mui-table-view-cell mui-media">
-            <a href="javascript:;">
-                <img class="mui-media-object mui-pull-left" src="../../../../statics/images/menu1.png">
-                <div class="mui-media-body">
-                    幸福
-                    <p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-                </div>
-            </a>
-        </li> -->
     </ul>
   </div>
 </template>

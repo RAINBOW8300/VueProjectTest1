@@ -39,7 +39,7 @@ export default {
    },
    methods: {
         getcomment(){
-            console.log(this.id)
+            // console.log(this.id)
           this.$http.get('getcomments/'+this.id+'?pageindex='+this.pageIndex)
             .then((res)=>{
                 if(res.status==200&&res.data.status==0){
