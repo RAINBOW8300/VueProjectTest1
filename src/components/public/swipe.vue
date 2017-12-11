@@ -18,9 +18,10 @@ export default {
 	created(){
 		this.getlunbo()
 	},
+	props:['imageurl'],
  	methods: {
 		getlunbo(){
-			this.$http.get('getlunbo')
+			this.$http.get(this.imageurl)
 				.then((res)=>{
 					if(res.status===200&&res.data.status==0){
 						this.images=res.data.message;

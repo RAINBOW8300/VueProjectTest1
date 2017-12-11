@@ -1,23 +1,26 @@
 <template>
     <div class="mui-content">
-      <ul class="mui-table-view mui-grid-view">
-        <li v-for="item in goodsList" :key="item.id" class="mui-table-view-cell mui-media mui-col-xs-6">
-            <a href="">
-                <img class="mui-media-object" :src="item.img_url">
-                <div class="mui-media-body">{{item.title}}</div>
-            </a>
-            <div class="bottom">
-                <h6>
-                    <span>￥{{item.sell_price}}</span>
-                    <s>￥{{item.market_price}}</s>
-                </h6>
-                <div class="sell">
-                    <span>热卖中</span>
-                    <span>剩余{{item.stock_quantity}}件</span>
-                </div>
-            </div>     
-        </li>
-      </ul> 
+        <mt-loadmore :autoFill="false" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+            <ul class="mui-table-view mui-grid-view">
+                <li v-for="item in goodsList" :key="item.id" class="mui-table-view-cell mui-media mui-col-xs-6">
+                    <!-- <router-link :to="{name:'buyDetail',param:{id:item.id}}"> -->
+                    <router-link v-bind="{to:'/goods/getinfo/'+item.id}">
+                        <img class="mui-media-object" :src="item.img_url">
+                        <div class="mui-media-body">{{item.title}}</div>
+                    </router-link>
+                    <div class="bottom">
+                        <h6>
+                            <span>￥{{item.sell_price}}</span>
+                            <s>￥{{item.market_price}}</s>
+                        </h6>
+                        <div class="sell">
+                            <span>热卖中</span>
+                            <span>剩余{{item.stock_quantity}}件</span>
+                        </div>
+                    </div>     
+                </li>
+            </ul> 
+        </mt-loadmore>
     </div>
         
 </template>
@@ -26,20 +29,34 @@
     export default{
         data(){
             return{
-                goodsList:[]
+                goodsList:[],
+                pageIndex:1,
+                allLoaded:false
             }
+        },
+        // 当组件添加到父容器中的时候，才能获取组件中的元素进行操作
+        mounted() {
+            // 获取窗口的高度
+            let height = document.documentElement.clientHeight;
+            console.log(this.$refs);
+            // 设置mui-content的高度
+            this.$refs.muicontent.style.height = height + 'px';
         },
         created () {
             this.getgoods()
         },
         methods: {
             getgoods(){
-                this.$http.get('getgoods?pageindex=1')
+                this.$http.get('getgoods?pageindex='+this.pageIndex)
                     .then((res)=>{
                         if(res.status==200&&res.data.status==0){
                             if(res.data.message.length>0){
-                                this.goodsList=res.data.message
+                                this.goodsList=this.goodsList.concat(res.data.message)
+                            }else{
+                                this.allLoaded=true;
+                                this.$toast("已经到底了")
                             }
+                             this.$refs.loadmore.onBottomLoaded();
                         }else{
                             console.log("服务器出错")
                         }
@@ -47,6 +64,10 @@
                     .catch((err)=>{
                         console.error(err)
                     })
+            },
+            loadBottom(){
+                this.pageIndex++,
+                this.getgoods()
             }
         }
     }

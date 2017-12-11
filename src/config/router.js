@@ -20,6 +20,10 @@ import video from '../components/Home/Video/video.vue'
 import newsDetail from '../components/Home/News/detail.vue'
 //图片详细页面
 import imageDetail from '../components/Home/Share/detail.vue'
+//导入商品详情页面
+import buyDetail from '../components/Home/Buy/detail.vue'
+//导入商品评价页面
+import buyComment from '../components/Home/Buy/comment.vue'
 // import default from 'vue';
 //设置路由
 let router = new VueRouter({
@@ -36,7 +40,9 @@ let router = new VueRouter({
         { path: '/share', meta: { title: '图片分享' }, component: share },
         { path: '/video', meta: { title: '视频专区' }, component: video },
         { name: 'newsDetail', meta: { title: '新闻详情' }, path: '/detail/:id', component: newsDetail, props: true },
-        { name: 'imageDetail', meta: { title: '图片详情' }, path: '/getimageInfo/:id', component: imageDetail, props: true }
+        { name: 'imageDetail', meta: { title: '图片详情' }, path: '/getimageInfo/:id', component: imageDetail, props: true },
+        { name: 'buyDetail', meta: { title: '商品详情页' }, path: '/goods/getinfo/:id', component: buyDetail, props: true },
+        { name: 'buyComment', meta: { title: '商品图文展示' }, path: '/buyComment/:id', component: buyComment, props: true }
     ],
     linkActiveClass: 'mui-active'
 })

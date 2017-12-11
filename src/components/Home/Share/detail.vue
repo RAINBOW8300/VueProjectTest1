@@ -7,9 +7,7 @@
 
         <ul class="mui-table-view mui-grid-view mui-grid-9">
             <li v-for="(item,index) in images" :key="index" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-                <a href="#">
-                   <img :src="item.src" alt="">
-                </a>
+                   <img @click="$preview.open(index, images)" class="preview-img" :src="item.src" alt="">
             </li>
         </ul> 
 
@@ -22,7 +20,11 @@
 <script>
 //引入评论组件
 import comment from '../../public/comment.vue'
-
+//引入vue
+import Vue from 'vue'
+//引入preview插件
+import VuePreview from 'vue-preview'
+Vue.use(VuePreview)
 export default {
     data () {
         return {
@@ -58,6 +60,10 @@ export default {
                 .then((res)=>{
                     if(res.status==200&&res.data.status==0){
                         this.images=res.data.message
+                        this.images.forEach(item=>{
+                            item.w=600;
+                            item.h=400;
+                        })
                     }else{
                         console.log("服务器请求错误")
                     }
@@ -65,6 +71,10 @@ export default {
                 .catch((err)=>{
                     console.error(err)
                 })
+        },
+        //显示放大图片
+        getpic(){
+
         }
     },
     //把评论组件模板对象挂载到detail页面

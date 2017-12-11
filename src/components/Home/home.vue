@@ -1,7 +1,7 @@
 <template>
     <div class="mui-content">
         <!-- 轮播图部分 -->
-		<swipe></swipe>
+		<swipe :imageurl="getlunbo"></swipe>
 		<!-- 九宫格部分 -->
         <ul class="mui-table-view mui-grid-view mui-grid-9">
             <li v-for="item in menus" :key="item.url" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
@@ -22,7 +22,8 @@ import swipe from '../public/swipe.vue'
         data(){
             return {
 				images:[],
-				menus:[]
+				menus:[],
+				getlunbo:'getlunbo'
             }
 		},
 		created(){
