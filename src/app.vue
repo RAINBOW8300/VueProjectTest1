@@ -1,7 +1,7 @@
 <template>
 <div class="container">
    <header class="mui-bar mui-bar-nav">
-        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <a @click="goback" class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
         <h1 class="mui-title">底部选项卡-div模式</h1>
     </header>
     <nav class="mui-bar mui-bar-tab">
@@ -28,7 +28,24 @@
 
 <script>
     export default{
-
+        data() {
+            return {
+                isShow:false
+            }
+        },
+        created () {
+            
+        },
+        watch: {
+            '$route':function(newvalue){
+                
+            }
+        },
+        methods: {
+            goback(){
+                this.$router.back()
+            }
+        }
     }
 </script>
 <style scoped>
