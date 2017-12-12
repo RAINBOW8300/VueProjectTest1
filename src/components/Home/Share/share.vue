@@ -14,7 +14,7 @@
     <div class="images">
       <ul>
           <li v-for="item in images" :key="item.id">
-              <<router-link :to="{name:'imageDetail',params:{id:item.id}}">
+              <router-link :to="{name:'imageDetail',params:{id:item.id}}">
                   <img :src="item.img_url" alt="">
                   <p class="cover">
                       <span>{{item.title}}</span><br>
