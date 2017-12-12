@@ -12,7 +12,7 @@
                 市场价：<s>￥{{buyDetail.market_price}}</s> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 销售价：<span>￥{{buyDetail.sell_price}}</span>
             </div>
             <div class="num">
-                购买数量：xxx
+                购买数量：<number></number>
                 <div class="ball"></div>
             </div>
             <div class="button">
@@ -42,7 +42,8 @@
  import swipe from '../../public/swipe.vue'
  //导入不同组件之间通信用的组件
 import vueObj from '../../public/communicat.js'
-
+//插入number模块
+import number from '../../public/number.vue'
     //导出组件
     export default {
         data() {
@@ -92,7 +93,8 @@ import vueObj from '../../public/communicat.js'
             }
         },
         components: {
-            swipe
+            swipe,
+            number
         }
     }
 </script>
@@ -168,5 +170,8 @@ import vueObj from '../../public/communicat.js'
     
     .footer .mui-btn-danger {
         margin-top: 10px;
+    }
+    .ball{
+        display: none
     }
 </style>
