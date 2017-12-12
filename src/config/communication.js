@@ -1,4 +1,4 @@
-// 通信用的组件
+// 通信用的模块
 
 import Vue from 'vue';
 

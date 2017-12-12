@@ -52,7 +52,6 @@ export default {
         .get('getgoods?pageindex=' + this.pageindex)
         .then(res => {
           if (res.status === 200 && res.data.status === 0) {
-
             // 判断服务器返回的数组长度是否为0
             if (res.data.message.length === 0) {
                 // 告诉loadmore数据加载完毕（已经没有数据了）
@@ -74,6 +73,7 @@ export default {
         // 加载数据
         this.pageindex++;
         this.getgoods();
+
 
         
     },

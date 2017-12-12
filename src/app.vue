@@ -15,7 +15,7 @@
 				<span class="mui-tab-label">会员</span>
 			</router-link>
 			<router-link class="mui-tab-item" to="/shopcar">
-				<span class="mui-icon mui-icon-contact"><span class="mui-badge">0</span></span>
+				<span class="mui-icon mui-icon-contact"><span class="mui-badge">{{ count }}</span></span>
 				<span class="mui-tab-label">购物车</span>
 			</router-link>
 			<router-link class="mui-tab-item" to="/search">
@@ -32,13 +32,19 @@
 </template>
 
 <script>
+
+
 	// 导入通信用的模块
 	import vueObj from './config/communication';
+
+	// 加载操作本地存储的模块
+	import { getData } from './config/localstorageHelp';
 
   export default {
     data() {
       return {
-        isShow: false
+				isShow: false,
+				count: 0
       }
 		},
 		methods: {
@@ -53,18 +59,47 @@
 				} else {
 					this.isShow = false;
 				}
+			},
+			getcount() {
+				// 读取本地存储中商品的总数
+				let data = getData();
+				let count = 0;
+				data.forEach(item => {
+					count += item.count
+				});
+				this.count = count;
 			}
 		},
 
 		// 当刷新页面的时候，因为路由地址没有发生变化，没有执行watch，所以要在组件创建完毕后，判断是否显示后退按钮
 		created() {
+			// 测试vuex
+			// 通过commit 来调用mutations中的方法
+			this.$store.commit('add', 8);
+
+			console.log(this.$store.state.number);
+
+
 			this.judgeBack(this.$route.path);
 
+			// 获取本地存储中商品的个数，并更新界面
+			this.getcount();
+
 			// 当组件创建完毕，监听vueObj的 updateBadge事件
-			vueObj.$on('updateBadge', function (count) {
-				console.log(count);
+			vueObj.$on('updateBadge', (count) => {
+				// console.log(count);
+				this.count += count;
+			
 			})
+
+			// 在购物车删除数据的时候
+			vueObj.$on('update', () => {
+				this.getcount();
+			})
+
+			
 		},
+		
 		// 当路由地址变化的时候。决定后退按钮显示或者隐藏
 		// $router  路由对象  
 		// $route   路由规则  当前的路由规则 path params
