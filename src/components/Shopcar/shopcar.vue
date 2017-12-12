@@ -1,18 +1,21 @@
 <template>
   <div class="mui-content">
-      shopcar
+    shopcar
   </div>
 </template>
-<script>
-    export default{
-        data(){
-            return{
 
-            }
-        }
+<script>
+  export default {
+    data() {
+      return {
+
+      }
     }
+  }
 </script>
 
 <style scoped>
 
 </style>
+
+
