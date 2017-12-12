@@ -12,10 +12,15 @@ import app from './app.vue';
 // 导入路由模块
 import router from './config/router';
 
+
+// 导入vuex的仓库store
+import store from './config/store';
+
 // 3 把路由挂载到vue实例上
 let vm = new Vue({
   el: '#app',
   router,
+  store: store,
   render: c => c(app),
   // render: function (createElement) {
   //   return createElement(app);

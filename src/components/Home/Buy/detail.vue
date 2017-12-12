@@ -13,7 +13,15 @@
             </div>
             <div class="num">
                 购买数量：<number @numberchange="numberchanged" :stock="goods.stock_quantity"></number>
-                <div v-if="false" class="ball"></div>
+
+                <transition 
+                    v-on:before-enter="beforeEnter"
+                    v-on:enter="enter"
+                    v-on:after-enter="afterEnter"
+                    v-on:after-leave="afterLeave"
+                >
+                    <div v-show="isShow" class="ball"></div>
+                </transition>
             </div>
             <div class="button">
                 <button class="mui-btn mui-btn-primary">立刻购买</button>
@@ -35,6 +43,7 @@
             <a @click="push" class="mui-btn mui-btn-danger mui-btn-outlined">商品评论</a>
         </div>
     </div>
+    
 </template>
 
 <script>
@@ -47,6 +56,9 @@ import number from '../../Common/number.vue';
 // 导入通信用的模块
 import vueObj from '../../../config/communication';
 
+
+// 导入操作本地存储的模块
+import { setData } from '../../../config/localstorageHelp';
 //导出组件
 export default {
   components: {
@@ -58,7 +70,9 @@ export default {
       return {
         imgUrl: 'getthumimages/' + this.id,
         goods: {},
-        count: 1
+        count: 1,
+        // 控制动画小球的显示隐藏
+        isShow: false
       }
   },
   created() {
@@ -89,9 +103,9 @@ export default {
       this.$router.push({name: 'buyComment', params: {id: this.id}})
     },
     // number组件中的数字发生变化后会调用
-    numberchanged(count) {
+    numberchanged(obj) {
       // console.log(count);
-      this.count = count;
+      this.count = obj.count;
     },
     // 点击加入购物车
     addcart() {
@@ -99,17 +113,53 @@ export default {
       // this.count
       // 2 更新底部的badge
       // 2.1 点击加入购物车，要把count传递到app.vue
-      vueObj.$emit('updateBadge', this.count);
+      this.isShow = true;
       // 2.2 更新
-
-      // 3 小球动画
+      // 在小球动画执行完毕后 更新badge
+      // 3 小球动画  -- transition
       // 4 保存购物车的数据到本地存储
+        setData({id: this.id, count: this.count});
+    },
+    // 执行动画的钩子函数
+    beforeEnter(el) {
+        // console.log('beforeEnter');
+        // el 要执行动画的小球
+        el.style.transform = 'translate(0, 0)';
+    },
+    enter(el, done) {
+        console.log('enter');
+        // getBoundingClientRect() 方法返回元素的大小及其相对于视口的位置。
+        // 小球的位置
+        let elX = el.getBoundingClientRect().left;
+        let elY = el.getBoundingClientRect().top;
+        // badge的位置
+        // 通过dom获取badge
+        let badge = document.querySelector('.mui-badge');
+        let badgeX = badge.getBoundingClientRect().left;
+        let badgeY = badge.getBoundingClientRect().top;
+
+        // 相减
+        let x = badgeX - elX;
+        let y = badgeY - elY;
+
+        el.style.transform = `translate(${x}px, ${y}px)`;
+        done();
+    },
+    afterEnter: function (el) {
+        this.isShow = false;
+    },
+    afterLeave: function () {
+        // 当动画小球完全离开的时候，更新badge
+         // 触发事件
+      vueObj.$emit('updateBadge', this.count);
     }
+
   }
 }
 </script>
 
 <style scoped>
+
     .num {
         position: relative;
     }

@@ -11,7 +11,7 @@
     </div>
 
     <!--  评论 -->
-    <comment :id="id"></comment>
+    <comment :id="id" ></comment>
   </div>
 </template>
 

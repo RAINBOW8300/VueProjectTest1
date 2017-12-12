@@ -25,6 +25,8 @@ export default {
     }
   },
   created() {
+    console.log(this.$store.state.number + "  news.vue");
+
     // 提示正在加载
     // this.$indicator.open('正在加载...');
     this.getnews();
