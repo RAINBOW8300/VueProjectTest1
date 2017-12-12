@@ -1,91 +1,94 @@
 <template>
   <div class="mui-content">
         <div class="title">
-            <h4>{{info.title}}</h4>
-            <span>{{info.add_time|fmtdata('YYYY-DD-MM')}}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span>点击次数:{{info.click}}</span>
+            <h4>{{ detail.title }}</h4>
+            <span>{{ detail.add_time | fmtdate('YYYY-MM-DD') }}</span> &nbsp;&nbsp;&nbsp;&nbsp; <span>点击次数: {{ detail.click }}</span>
         </div>
 
         <ul class="mui-table-view mui-grid-view mui-grid-9">
-            <li v-for="(item,index) in images" :key="index" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-                   <img @click="$preview.open(index, images)" class="preview-img" :src="item.src" alt="">
+            <li v-for="(item, index) in images" :key="index" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
+                <img @click="$preview.open(index, images)" class="preview-img" :src="item.src" alt="">
             </li>
         </ul> 
 
-        <p class="content" v-html="info.content"></p>
+        <p class="content" v-html="detail.content">
+        </p>
 
         <!-- 评论--> 
         <comment :id="id"></comment>
-  </div>
+    </div>
 </template>
+
 <script>
-//引入评论组件
-import comment from '../../public/comment.vue'
-//引入vue
-import Vue from 'vue'
-//引入preview插件
+import Vue from 'vue';
+// 安装VuePreview插件
 import VuePreview from 'vue-preview'
 Vue.use(VuePreview)
-export default {
-    data () {
-        return {
-            info:{},
-            images:[]
-        }
-    },
-    props: ['id'],
-    created () {
-      this.getimageInfo(),
-      this.getthumimages()  
-    },
-    methods: {
-        //获取图片详细信息
-        getimageInfo(){
-            this.$http.get('getimageInfo/'+this.id)
-                .then((res)=>{
-                    if(res.status==200&&res.data.status==0){
-                        if(res.data.message.length>0){
-                            this.info=res.data.message[0]
-                        }
-                    }else{
-                        console.log("服务器请求失败")
-                    }
-                })
-                .catch((err)=>{
-                    console.error(err)
-                })
-        },
-        //获取图片缩略图
-        getthumimages(){
-            this.$http.get('getthumimages/'+this.id)
-                .then((res)=>{
-                    if(res.status==200&&res.data.status==0){
-                        this.images=res.data.message
-                        this.images.forEach(item=>{
-                            item.w=600;
-                            item.h=400;
-                        })
-                    }else{
-                        console.log("服务器请求错误")
-                    }
-                })
-                .catch((err)=>{
-                    console.error(err)
-                })
-        },
-        //显示放大图片
-        getpic(){
+// 导入评论组件
+import comment from '../../Common/comment.vue';
 
-        }
+export default {
+  data() {
+      return {
+          detail: {},
+          images: []
+      }
+  },
+  props: ['id'],
+  created() {
+      this.getdetail();
+      this.getimages();
+  },
+  components: {
+      comment
+  },
+  methods: {
+    //   获取图片详情
+    getdetail() {
+        var url = 'getimageInfo/' + this.id;
+        this.axios
+            .get(url)
+            .then((response) => {
+                if (response.status === 200 && response.data.status === 0) {
+                    if (response.data.message.length > 0) {
+                        this.detail=response.data.message[0];
+                    }
+                } else {
+                    console.log('服务器内部错误');
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+            })
     },
-    //把评论组件模板对象挂载到detail页面
-    components: {
-        comment
+    // 获取详情页中的图片
+    getimages() {
+        let url = 'getthumimages/' + this.id;
+        this.axios
+            .get(url)
+            .then((response) => {
+                if (response.status === 200 && response.data.status === 0) {
+                    this.images = response.data.message;
+
+                    this.images.forEach(item => {
+                        item.w = 600;
+                        item.h = 400;
+                    });
+
+                } else {
+                    console.log('服务器内部错误');
+                }
+            })
+            .catch((err) => {
+                console.error(err)
+            })
     }
+  }
 }
 </script>
 
 <style scoped>
- .mui-content {
+.mui-content {
     background-color: #fff;
   }
   .title {

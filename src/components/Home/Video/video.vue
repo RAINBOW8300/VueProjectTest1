@@ -1,25 +1,17 @@
 <template>
-    <div class="mui-content">
-        video
-    </div>
+  <div class="mui-content">
+    contact
+  </div>
 </template>
 
 <script>
-    export default{
-        data(){
-            return{
-
-            }
-        },
-        created () {
-            
-        },
-        methods: {
-            
-        }
-    }
+export default {
+  
+}
 </script>
 
 <style scoped>
 
 </style>
+
+

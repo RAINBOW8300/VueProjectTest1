@@ -2,101 +2,111 @@
     <div class="mui-content">
         <div class="detail">
             <div class="top">
-                <!-- 轮播图 -->
-                <swipe :imageurl="imageUrl"></swipe>
+              <!-- 轮播图 -->
+              <swipe :imgUrl="imgUrl"></swipe>
             </div>
         </div>
         <div class="sell">
-            <h4>{{buyDetail.title}}</h4>
+            <h4>{{ goods.title }}</h4>
             <div class="price">
-                市场价：<s>￥{{buyDetail.market_price}}</s> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 销售价：<span>￥{{buyDetail.sell_price}}</span>
+                市场价：<s>￥{{ goods.market_price }}</s> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 销售价：<span>￥{{ goods.sell_price }}</span>
             </div>
             <div class="num">
-                购买数量：<number></number>
-                <div class="ball"></div>
+                购买数量：<number @numberchange="numberchanged" :stock="goods.stock_quantity"></number>
+                <div v-if="false" class="ball"></div>
             </div>
             <div class="button">
                 <button class="mui-btn mui-btn-primary">立刻购买</button>
-                <button class="mui-btn mui-btn-danger">加入购物车</button>
+                <button @click="addcart" class="mui-btn mui-btn-danger">加入购物车</button>
             </div>
         </div>
 
         <div class="param">
             <h5>商品参数</h5>
             <div class="info">
-                <p>商品编号：{{buyDetail.goods_no}}</p>
-                <p>库存情况：{{buyDetail.stock_quantity}}件</p>
-                <p>上架时间：{{buyDetail.add_time|fmtdata('YYYY-MM-DD HH:mm:ss')}}</p>
+                <p>商品编号：{{ goods.goods_no }}</p>
+                <p>库存情况：{{ goods.stock_quantity }}件</p>
+                <p>上架时间：{{ goods.add_time | fmtdate("YYYY-MM-DD HH:mm:ss") }}</p>
             </div>
         </div>
         
         <div class="footer">
             <a class="mui-btn mui-btn-primary mui-btn-outlined">图文介绍</a>
-            <a @click="comment()" class="mui-btn mui-btn-danger mui-btn-outlined">商品评论</a>
+            <a @click="push" class="mui-btn mui-btn-danger mui-btn-outlined">商品评论</a>
         </div>
     </div>
 </template>
 
 <script>
- //引入轮播图组件
- import swipe from '../../public/swipe.vue'
- //导入不同组件之间通信用的组件
-import vueObj from '../../public/communicat.js'
-//插入number模块
-import number from '../../public/number.vue'
-    //导出组件
-    export default {
-        data() {
-            return {
-                buyDetail:{},
-                imageUrl:'getthumimages/'+this.id,
-                buyInfo:{}
+// 导入轮播图组件
+import swipe from '../../Common/swipe.vue';
+
+// 导入number组件
+import number from '../../Common/number.vue';
+
+// 导入通信用的模块
+import vueObj from '../../../config/communication';
+
+//导出组件
+export default {
+  components: {
+    swipe,
+    number
+  },
+  props: ['id'],
+  data() {
+      return {
+        imgUrl: 'getthumimages/' + this.id,
+        goods: {},
+        count: 1
+      }
+  },
+  created() {
+    this.getgoods();
+  },
+  methods: {
+    // 获取商品详情
+    getgoods() {
+      let url = 'goods/getinfo/' + this.id;
+      this.axios
+        .get(url)
+        .then((res) => {
+          if (res.status === 200 && res.data.status === 0) {
+            if (res.data.message.length === 0) {
+              return;
             }
-        } ,
-        props:['id'],
-        created () {
-            this.buyGetDetail()
-        },
-        methods: {
-            buyGetDetail(){
-                this.$http.get('goods/getinfo/'+this.id)
-                    .then((res)=>{
-                        if(res.status==200&&res.data.status==0){
-                            if(res.data.message.length){
-                                this.buyDetail=res.data.message[0]
-                            }
-                        }else{
-                            this.$toast("服务器请求出错")
-                        }
-                    })
-                    .catch((err)=>{
-                        console.error(err)
-                    })
-            },
-            getimageInfo(){
-                this.$http.get('goods/getdesc/'+this.id)
-                    .then((res)=>{
-                        if(res.status==200&&res.data.status==0){
-                            if(res.data.message.length){
-                                this.buyInfo=res.data.message[0]
-                            }
-                        }else{
-                            this.$toast("服务器请求错误")
-                        }
-                    })
-                    .catch((err)=>{
-                        console.error(err)
-                    })
-            },
-            comment(){
-                this.$router.push('/buyComment/'+this.id)
-            }
-        },
-        components: {
-            swipe,
-            number
-        }
+            this.goods = res.data.message[0]
+          } else {
+            console.log('服务器内部错误');
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+    },
+    push() {
+      // 点击商品评论，跳转到评论组件
+      this.$router.push({name: 'buyComment', params: {id: this.id}})
+    },
+    // number组件中的数字发生变化后会调用
+    numberchanged(count) {
+      // console.log(count);
+      this.count = count;
+    },
+    // 点击加入购物车
+    addcart() {
+      // 1 获取到number组件中值
+      // this.count
+      // 2 更新底部的badge
+      // 2.1 点击加入购物车，要把count传递到app.vue
+      vueObj.$emit('updateBadge', this.count);
+      // 2.2 更新
+
+      // 3 小球动画
+      // 4 保存购物车的数据到本地存储
     }
+  }
+}
 </script>
 
 <style scoped>
@@ -170,8 +180,5 @@ import number from '../../public/number.vue'
     
     .footer .mui-btn-danger {
         margin-top: 10px;
-    }
-    .ball{
-        display: none
     }
 </style>
